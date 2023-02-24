@@ -148,8 +148,8 @@ configure_eturnal() {
         fi
 
         sed -i "s|eturnal_yml=.*|eturnal_yml=${CONFIG_PATH}/${CONFIG_FILE}|g" /usr/sbin/eturnalctl
-
         ln -sf "${CONFIG_PATH}"/"${CONFIG_FILE}" /usr/lib/eturnal/etc/eturnal.yml
+        chmod 640 "${CONFIG_PATH}"/"${CONFIG_FILE}"
     fi
 }
 
