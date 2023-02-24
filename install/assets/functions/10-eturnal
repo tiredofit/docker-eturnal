@@ -6,11 +6,6 @@ bootstrap_filesystem() {
     fi
     if [ $(stat -c %U "${CONFIG_PATH}") != "eturnal" ] ; then chown -R eturnal:eturnal "${CONFIG_PATH}" ; fi
 
-    if [ ! -d "${DATA_PATH}" ]; then
-        mkdir -p "${DATA_PATH}"
-    fi
-    if [ $(stat -c %U "${DATA_PATH}") != "eturnal" ] ; then chown eturnal:eturnal "${DATA_PATH}" ; fi
-
     if [ ! -d "${LOG_PATH}" ]; then
         mkdir -p "${LOG_PATH}"
     fi
