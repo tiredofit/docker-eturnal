@@ -1,0 +1,16 @@
+#!/command/with-contenv bash
+
+source /assets/functions/00-container
+PROCESS_NAME="eturnal"
+prepare_service defaults single
+
+check_container_initialized
+check_service_initialized init
+
+liftoff
+
+print_start "Starting Eturnal ${ETURNAL_VERSION}"
+exec sudo -u eturnal \
+                                eturnalctl foreground \
+                                        ${ETURNAL_ARGS}
+

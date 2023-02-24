@@ -1,0 +1,156 @@
+#!/command/with-contenv bash
+
+bootstrap_filesystem() {
+    if [ ! -d "${CONFIG_PATH}" ]; then
+        mkdir -p "${CONFIG_PATH}"
+    fi
+    if [ $(stat -c %U "${CONFIG_PATH}") != "eturnal" ] ; then chown -R eturnal:eturnal "${CONFIG_PATH}" ; fi
+
+    if [ ! -d "${DATA_PATH}" ]; then
+        mkdir -p "${DATA_PATH}"
+    fi
+    if [ $(stat -c %U "${DATA_PATH}") != "eturnal" ] ; then chown eturnal:eturnal "${DATA_PATH}" ; fi
+
+    if [ ! -d "${LOG_PATH}" ]; then
+        mkdir -p "${LOG_PATH}"
+    fi
+    if [ $(stat -c %U "${LOG_PATH}") != "eturnal" ] ; then chown -R eturnal:eturnal "${LOG_PATH}" ; fi
+
+    case "${LOG_TYPE,,}" in
+        file )
+            create_logrotate eturnal "${LOG_PATH}"/"${LOG_FILE}" eturnal eturnal
+        ;;
+    esac
+}
+
+configure_eturnal() {
+    if [ "${SETUP_TYPE,,}" = "auto" ] || [ ! -f "${CONFIG_PATH}"/"${CONFIG_FILE}" ] ; then
+        print_notice "[configure_eturnal] Configuring Eturnal settings"
+        #sudo -u eturnal touch "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        sudo -u eturnal echo '' > "${CONFIG_PATH}"/"${CONFIG_FILE}"
+
+        s6-setuidgid eturnal yq -i  '
+                                        .eturnal.secret = env(SECRET) |
+                                        .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
+                                        .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
+                                        .eturnal.strict_expiry = strenv(STRICT_EXPIRY)
+                                    ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+
+        if var_true "${ENABLE_IPV4}" ; then
+            if [ -z "${PUBLIC_IPV4}" ] || [ "${PUBLIC_IPV4,,}" = "auto" ] ; then
+                export PUBLIC_IPV4="$(stun -4 "$(echo "${STUN_IPV4_HOST}" | cut -d : -f 1)" "$(echo "${STUN_IPV4_HOST}" | cut -d : -f 2)")"
+            fi
+
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.relay_ipv4_addr = env(PUBLIC_IPV4)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if var_true "${ENABLE_IPV6}" ; then
+            if [ -z "${PUBLIC_IPV6}" ] || [ "${PUBLIC_IPV6,,}" = "auto" ] ; then
+                export PUBLIC_IPV6="$(stun -6 "$(echo "${STUN_IPV6_HOST}" | rev | cut -d : -f 2-7 | rev)" "$(echo "${STUN_IPV6_HOST}" | rev | cut -d : -f 1 | rev)")"
+            fi
+
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.relay_ipv6_addr = env(PUBLIC_IPV6)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if var_true "${ENABLE_UDP}" ; then
+            s6-setuidgid eturnal yq -i  '.eturnal.listen +=     [
+                                                                    {
+                                                                        "transport" : "udp",
+                                                                        "ip" : strenv(UDP_LISTEN_IP),
+                                                                        "port" : env(UDP_LISTEN_PORT)
+                                                                    }
+                                                                ]
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if var_true "${ENABLE_TCP}" ; then
+            s6-setuidgid eturnal yq -i  '.eturnal.listen +=     [
+                                                                    {
+                                                                        "transport" : "tcp",
+                                                                        "ip" : strenv(TCP_LISTEN_IP),
+                                                                        "port" : env(TCP_LISTEN_PORT)
+                                                                    }
+                                                                ]
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if var_true "${ENABLE_TLS}" ; then
+            s6-setuidgid eturnal yq -i  '.eturnal.listen +=     [
+                                                                    {
+                                                                        "transport" : "tls",
+                                                                        "ip" : env(TLS_LISTEN_IP),
+                                                                        "port" : env(TLS_LISTEN_PORT)
+                                                                    }
+                                                                ]
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+
+            if [ -n "${TLS_CERT_FILE}" ] ; then
+                s6-setuidgid eturnal yq -i  '
+                                                .eturnal.tls_crt_file = env(TLS_CERT_FILE)
+                                            ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            fi
+
+            if [ -n "${TLS_KEY_FILE}" ] ; then
+                s6-setuidgid eturnal yq -i  '
+                                                .eturnal.tls_crt_file = env(TLS_KEY_FILE)
+                                            ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            fi
+        fi
+
+        if [ "${LOG_TYPE,,}" = "console" ] ; then
+            export LOG_PATH="stdout"
+        fi
+        s6-setuidgid eturnal yq -i  '
+                                        .eturnal.log_level = env(LOG_LEVEL) |
+                                        .eturnal.log_dir = env(LOG_PATH)
+                                    ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+
+        if var_true "${ENABLE_LOG_STUN}" ; then
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.modules.mod_log_stun.level = env(STUN_LOG_LEVEL)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if var_true "${ENABLE_STATS_INFLUX}" ; then
+            sanity_var "${STATS_INFLUX_HOST}" "Influx statistics host"
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.modules.mod_stats_influx.host = env(STATS_INFLUX_HOST) |
+                                            .eturnal.modules.mod_stats_influx.port = env(STATS_INFLUX_PORT) |
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if var_true "${ENABLE_STATS_PROMETHEUS}" ; then
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.modules.mod_stats_prometheus.ip = strenv(STATS_PROMETHEUS_LISTEN_IP) |
+                                            .eturnal.modules.mod_stats_prometheus.port = env(STATS_PROMETHEUS_LISTEN_PORT) |
+                                            .eturnal.modules.mod_stats_prometheus.tls = env(STATS_PROMETHEUS_ENABLE_TLS) |
+                                            .eturnal.modules.mod_stats_prometheus.vm_metrics = env(STATS_PROMETHEUS_ENABLE_VM_METRICS)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if [ -n "${BLACKLIST_IP}" ] ; then
+            blacklisted_ips="$(echo "${BLACKLIST_IP}" | tr "," "\n")"
+            for blacklisted_ip in $blacklisted_ips ; do
+                export blip=${blacklisted_ip}
+                s6-setuidgid eturnal yq -i  '.eturnal.blacklist += [ strenv(blip) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            done
+        fi
+
+        if [ -n "${WHITELIST_IP}" ] ; then
+            whitelisted_ips="$(echo "${WHITELIST_IP}" | tr "," "\n")"
+            for whitelisted_ip in $whitelisted_ips ; do
+                export wlip=${whitelisted_ip}
+                s6-setuidgid eturnal yq -i  '.eturnal.whitelist += [ strenv(wlip) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            done
+        fi
+
+        sed -i "s|eturnal_yml=.*|eturnal_yml=${CONFIG_PATH}/${CONFIG_FILE}|g" /usr/sbin/eturnalctl
+
+        ln -sf "${CONFIG_PATH}"/"${CONFIG_FILE}" /usr/lib/eturnal/etc/eturnal.yml
+    fi
+}
+

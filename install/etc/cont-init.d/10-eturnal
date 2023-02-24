@@ -1,0 +1,13 @@
+#!/command/with-contenv bash
+
+source /assets/functions/00-container
+set -a
+source /assets/defaults/10-eturnal
+prepare_service
+set +a
+PROCESS_NAME="eturnal"
+
+bootstrap_filesystem
+configure_eturnal
+
+liftoff
