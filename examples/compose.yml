@@ -2,24 +2,31 @@ services:
   eturnal-app:
     image: tiredofit/eturnal:latest
     container_name: eturnal-app
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.eturnal.rule=Host(`eturnal.example.com`)
-      - traefik.http.services.eturnal.loadbalancer.server.port=80
+    ports:
+      - 3478:3478
+      - 3478:3478/udp
+      - 50000-50500:50000-50500/udp
     volumes:
-      - ./config:/config
       - ./logs:/logs
     environment:
       - TIMEZONE=America/Vancouver
       - CONTAINER_NAME=eturnal-app
+      - CONTAINER_ENABLE_MONITORING=FALSE
       - SETUP_TYPE=AUTO
+
+      - SOFTWARE_NAME=eturnal
+      - REALM=example.com
+      - ENABLE_IPV4=TRUE
+      - PUBLIC_IPV4=auto
+
+      - RELAY_MIN_PORT=50000
+      - RELAY_MAX_PORT=50500
+
+      - LOG_LEVEL=info
     networks:
-      - proxy
       - services
     restart: always
 
 networks:
-  proxy:
-    external: true
   services:
     external: true
