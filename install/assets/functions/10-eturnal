@@ -34,7 +34,7 @@ configure_eturnal() {
 
         if var_true "${ENABLE_IPV4}" ; then
             if [ -z "${PUBLIC_IPV4}" ] || [ "${PUBLIC_IPV4,,}" = "auto" ] ; then
-                export PUBLIC_IPV4="$(stun -4 "$(echo "${STUN_IPV4_HOST}" | cut -d : -f 1)" "$(echo "${STUN_IPV4_HOST}" | cut -d : -f 2)")"
+                export PUBLIC_IPV4="$(stun -4 "$(echo "${STUN_IPV4_SERVICE}" | cut -d : -f 1)" "$(echo "${STUN_IPV4_SERVICE}" | cut -d : -f 2)")"
             fi
 
             s6-setuidgid eturnal yq -i  '
@@ -44,7 +44,7 @@ configure_eturnal() {
 
         if var_true "${ENABLE_IPV6}" ; then
             if [ -z "${PUBLIC_IPV6}" ] || [ "${PUBLIC_IPV6,,}" = "auto" ] ; then
-                export PUBLIC_IPV6="$(stun -6 "$(echo "${STUN_IPV6_HOST}" | rev | cut -d : -f 2-7 | rev)" "$(echo "${STUN_IPV6_HOST}" | rev | cut -d : -f 1 | rev)")"
+                export PUBLIC_IPV6="$(stun -6 "$(echo "${STUN_IPV6_SERVICE}" | rev | cut -d : -f 2-7 | rev)" "$(echo "${STUN_IPV6_SERVICE}" | rev | cut -d : -f 1 | rev)")"
             fi
 
             s6-setuidgid eturnal yq -i  '
