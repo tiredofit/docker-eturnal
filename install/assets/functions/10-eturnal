@@ -4,12 +4,12 @@ bootstrap_filesystem() {
     if [ ! -d "${CONFIG_PATH}" ]; then
         mkdir -p "${CONFIG_PATH}"
     fi
-    if [ $(stat -c %U "${CONFIG_PATH}") != "eturnal" ] ; then chown -R eturnal:eturnal "${CONFIG_PATH}" ; fi
+    if [ "$(stat -c %U "${CONFIG_PATH}")" != "eturnal" ] ; then chown -R eturnal:eturnal "${CONFIG_PATH}" ; fi
 
     if [ ! -d "${LOG_PATH}" ]; then
         mkdir -p "${LOG_PATH}"
     fi
-    if [ $(stat -c %U "${LOG_PATH}") != "eturnal" ] ; then chown -R eturnal:eturnal "${LOG_PATH}" ; fi
+    if [ "$(stat -c %U "${LOG_PATH}")" != "eturnal" ] ; then chown -R eturnal:eturnal "${LOG_PATH}" ; fi
 
     case "${LOG_TYPE,,}" in
         file )
@@ -21,19 +21,7 @@ bootstrap_filesystem() {
 configure_eturnal() {
     if [ "${SETUP_TYPE,,}" = "auto" ] || [ ! -f "${CONFIG_PATH}"/"${CONFIG_FILE}" ] ; then
         print_notice "[configure_eturnal] Configuring Eturnal settings"
-        #sudo -u eturnal touch "${CONFIG_PATH}"/"${CONFIG_FILE}"
-        sudo -u eturnal echo '' > "${CONFIG_PATH}"/"${CONFIG_FILE}"
-
-        s6-setuidgid eturnal yq -i  '
-                                        .eturnal.max_bps = env(MAX_BPS) |
-                                        .eturnal.max_permissions = env(MAX_PERMISSIONS) |
-                                        .eturnal.realm = env(REALM) |
-                                        .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
-                                        .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
-                                        .eturnal.secret = env(SECRET) |
-                                        .eturnal.strict_expiry = env(STRICT_EXPIRY) |
-                                        .eturnal.software_name = env(SOFTWARE_NAME)
-                                    ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        sudo -u eturnal touch "${CONFIG_PATH}"/"${CONFIG_FILE}"
 
         if var_true "${ENABLE_IPV4}" ; then
             if [ -z "${PUBLIC_IPV4}" ] || [ "${PUBLIC_IPV4,,}" = "auto" ] ; then
@@ -126,6 +114,33 @@ configure_eturnal() {
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
         fi
 
+        s6-setuidgid eturnal yq -i  '
+                                        .eturnal.max_bps = env(MAX_BPS) |
+                                        .eturnal.max_permissions = env(MAX_PERMISSIONS) |
+                                        .eturnal.realm = env(REALM) |
+                                        .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
+                                        .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
+                                        .eturnal.secret = env(SECRET) |
+                                        .eturnal.strict_expiry = env(STRICT_EXPIRY) |
+                                        .eturnal.software_name = env(SOFTWARE_NAME)
+                                    ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+
+        if [ -n "${BLACKLIST_IP}" ] ; then
+            blacklisted_ips="$(echo "${BLACKLIST_IP}" | tr "," "\n")"
+            for blacklisted_ip in $blacklisted_ips ; do
+                export blip=${blacklisted_ip}
+                s6-setuidgid eturnal yq -i  '.eturnal.blacklist += [ strenv(blip) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            done
+        fi
+
+        if [ -n "${WHITELIST_IP}" ] ; then
+            whitelisted_ips="$(echo "${WHITELIST_IP}" | tr "," "\n")"
+            for whitelisted_ip in $whitelisted_ips ; do
+                export wlip=${whitelisted_ip}
+                s6-setuidgid eturnal yq -i  '.eturnal.whitelist += [ strenv(wlip) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            done
+        fi
+
         if [ "${LOG_TYPE,,}" = "console" ] ; then
             export LOG_PATH="stdout"
         fi
@@ -169,25 +184,32 @@ configure_eturnal() {
             fi
         fi
 
-        if [ -n "${BLACKLIST_IP}" ] ; then
-            blacklisted_ips="$(echo "${BLACKLIST_IP}" | tr "," "\n")"
-            for blacklisted_ip in $blacklisted_ips ; do
-                export blip=${blacklisted_ip}
-                s6-setuidgid eturnal yq -i  '.eturnal.blacklist += [ strenv(blip) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
-            done
-        fi
-
-        if [ -n "${WHITELIST_IP}" ] ; then
-            whitelisted_ips="$(echo "${WHITELIST_IP}" | tr "," "\n")"
-            for whitelisted_ip in $whitelisted_ips ; do
-                export wlip=${whitelisted_ip}
-                s6-setuidgid eturnal yq -i  '.eturnal.whitelist += [ strenv(wlip) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
-            done
-        fi
-
         sed -i "s|eturnal_yml=.*|eturnal_yml=${CONFIG_PATH}/${CONFIG_FILE}|g" /usr/sbin/eturnalctl
         ln -sf "${CONFIG_PATH}"/"${CONFIG_FILE}" /usr/lib/eturnal/etc/eturnal.yml
         chmod 640 "${CONFIG_PATH}"/"${CONFIG_FILE}"
     fi
 }
 
+configure_monitoring() {
+    if var_true "${CONTAINER_ENABLE_MONITORING}" && [ "${CONTAINER_MONITORING_BACKEND,,}" = "zabbix" ] ; then
+        source /assets/defaults/03-monitoring
+
+            cat <<EOF > "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}".d/eturnal.conf
+# Zabbix Eturnal Configuration - Automatically Generated
+# Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-eturnal
+# Autoregister=eturnal
+
+UserParameter=eturnal.get_statistics,echo \$(date) ; eturnalctl info
+UserParameter=eturnal.version,eturnalctl version
+EOF
+        if  var_true "${ENABLE_STATS_PROMETHEUS}" ; then
+            if var_true "${STATS_PROMETHEUS_ENABLE_TLS}" ; then
+                prometheus_listen_protocol=https
+            else
+                prometheus_listen_protocol=http
+            fi
+
+            echo "UserParameter=eturnal.get_metrics,echo \$(date) ; curl -s ${prometheus_listen_protocol}://${STATS_PROMETHEUS_LISTEN_IP}:${STATS_PROMETHEUS_LISTEN_PORT} | grep ^eturnal | sort" >> "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}".d/eturnal.conf
+        fi
+    fi
+}

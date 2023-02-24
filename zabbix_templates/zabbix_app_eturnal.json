@@ -1,0 +1,256 @@
+{
+    "zabbix_export": {
+        "version": "6.2",
+        "date": "2023-02-24T16:28:29Z",
+        "template_groups": [
+            {
+                "uuid": "a571c0d144b14fd4a87a9d9b2aa9fcd6",
+                "name": "Templates/Applications"
+            }
+        ],
+        "templates": [
+            {
+                "uuid": "8c2b1216c07440f99521e6b155a5b42b",
+                "template": "Eturnal",
+                "name": "Eturnal",
+                "description": "Eturnal Templates\n\nTo be used specifically with https://github.com/tiredofit/docker-eturnal\n\nTested with 1.10.1",
+                "groups": [
+                    {
+                        "name": "Templates/Applications"
+                    }
+                ],
+                "items": [
+                    {
+                        "uuid": "bbf9ebe34abf4eedb426dce829d3150e",
+                        "name": "Get Metrics",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eturnal.get_metrics",
+                        "history": "60m",
+                        "trends": "0",
+                        "value_type": "TEXT",
+                        "description": "Fetch Metrics from Prometheus Exporter"
+                    },
+                    {
+                        "uuid": "fad6c15d8ca3499b98f688b130e545a0",
+                        "name": "Get Statistics",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eturnal.get_statistics",
+                        "history": "60m",
+                        "trends": "0",
+                        "status": "DISABLED",
+                        "value_type": "TEXT",
+                        "description": "Fetch information from eturnalctl"
+                    },
+                    {
+                        "uuid": "d507252000334bcc9c77bfdd6b7a79f1",
+                        "name": "STUN - Requests Requests",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.stun.requests.total",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "STUN Total Requests",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_stun_requests_total ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "f8c5df54f4a54f869a04d1217acf2a4e",
+                        "name": "TURN - Active Sessions",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.stun.sessions.open",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of currently active TURN sessions",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_turn_open_sessions ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "6c7d5c3aa2bc4974ad53aaa394274874",
+                        "name": "STUN/TURN - Protocol Errors Total",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.turn.protocol_error.total",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Total amount of protocol errors",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_protocol_error_total ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "ea36daa73c4f4843bccb8dcdab2eadbb",
+                        "name": "TURN - Relay Bytes Received",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.turn.relay_received_bytes",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of bytes received from TURN peers",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_turn_relay_rcvd_bytes ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "fd45598792a54a899bbc6a10d0ebd39f",
+                        "name": "TURN - Relay Bytes Sent",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.turn.relay_sent_bytes",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Number of bytes sent to TURN peers",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_turn_relay_sent_bytes ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "dc6ef6bd858046a482368c3896011a58",
+                        "name": "TURN - Sessions Duration",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.turn.session.duration.seconds",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "Duration of TURN session in seconds",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_turn_session_duration_seconds ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "7eaa2c2dccc2486b9cf9e5133f513455",
+                        "name": "TURN - Sessions Total",
+                        "type": "DEPENDENT",
+                        "key": "eturnal.turn.sessions.total",
+                        "delay": "0",
+                        "history": "7d",
+                        "description": "TURN session count",
+                        "preprocessing": [
+                            {
+                                "type": "REGEX",
+                                "parameters": [
+                                    "eturnal_turn_sessions_total ([0-9].*)",
+                                    "\\1"
+                                ]
+                            }
+                        ],
+                        "master_item": {
+                            "key": "eturnal.get_metrics"
+                        }
+                    },
+                    {
+                        "uuid": "f5f2da9156144a4da68510883d7b8478",
+                        "name": "Version",
+                        "type": "ZABBIX_ACTIVE",
+                        "key": "eturnal.version",
+                        "delay": "60m",
+                        "history": "7d",
+                        "trends": "0",
+                        "value_type": "CHAR",
+                        "description": "Get version information"
+                    }
+                ],
+                "tags": [
+                    {
+                        "tag": "Application",
+                        "value": "Eturnal"
+                    }
+                ]
+            }
+        ],
+        "graphs": [
+            {
+                "uuid": "c8ef62adc45f437aabd46c97f65a1680",
+                "name": "Protocol Errors",
+                "graph_items": [
+                    {
+                        "color": "199C0D",
+                        "calc_fnc": "ALL",
+                        "item": {
+                            "host": "Eturnal",
+                            "key": "eturnal.turn.protocol_error.total"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "5ac4869b2c7546bbb91ce8d3477e9018",
+                "name": "TURN Active Sessions",
+                "graph_items": [
+                    {
+                        "color": "199C0D",
+                        "calc_fnc": "ALL",
+                        "item": {
+                            "host": "Eturnal",
+                            "key": "eturnal.stun.sessions.open"
+                        }
+                    }
+                ]
+            },
+            {
+                "uuid": "3b4927ef66294fc28d7440901c1cb6a3",
+                "name": "TURN Total Sessions",
+                "graph_items": [
+                    {
+                        "color": "199C0D",
+                        "calc_fnc": "ALL",
+                        "item": {
+                            "host": "Eturnal",
+                            "key": "eturnal.turn.sessions.total"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
