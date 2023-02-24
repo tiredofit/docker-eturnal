@@ -9,5 +9,5 @@ PROCESS_NAME="eturnal"
 
 bootstrap_filesystem
 configure_eturnal
-
+echo "alias eternalctl=sudo -u eturnal eternalctl" >> /root/.bashrc
 liftoff

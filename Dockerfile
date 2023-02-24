@@ -15,7 +15,7 @@ RUN source assets/functions/00-container && \
     set -x && \
     addgroup -S -g 3478 eturnal && \
     adduser -D -S -s /sbin/nologin \
-            -h /dev/null \
+            -h /usr/lib/eturnal/run \
             -G eturnal \
             -g "eturnal" \
             -u 3478 eturnal \
@@ -62,6 +62,8 @@ RUN source assets/functions/00-container && \
     package cleanup && \
     \
     rm -rf \
+            /root/.cache \
+            /root/.gitconfig \
             /usr/sbin/rebar3 \
             /usr/src/*
 
