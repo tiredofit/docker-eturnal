@@ -1,3 +1,9 @@
+## 0.8.1 2023-02-24 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Bugfixes to TLS IP address, certificates, and strict expiry statements
+
+
 ## 0.8.0 2023-02-23 <dave at tiredofit dot ca>
 
    ### Added
