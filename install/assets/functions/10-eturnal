@@ -28,7 +28,8 @@ configure_eturnal() {
                                         .eturnal.secret = env(SECRET) |
                                         .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
                                         .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
-                                        .eturnal.strict_expiry = strenv(STRICT_EXPIRY)
+                                        .eturnal.strict_expiry = strenv(STRICT_EXPIRY) |
+                                        .eturnal.software_name = env(SOFTWARE_NAME)
                                     ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
 
         if var_true "${ENABLE_IPV4}" ; then

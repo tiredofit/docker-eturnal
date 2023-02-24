@@ -127,6 +127,7 @@ Be sure to view the following repositories to understand all the customizable op
 | `RELAY_MIN_PORT`                     |                                                                                     | `49152`                        |
 | `SECRET`                             |                                                                                     | `tiredofit`                    |
 | `SETUP_MODE`                         |                                                                                     | `AUTO`                         |
+| `SOFTWARE_NAME`                      | Software name to advertise during STUN/TURN                                         | `eturnal`                      |
 | `STATS_INFLUX_HOST`                  |                                                                                     | ``                             |
 | `STATS_INFLUX_PORT`                  |                                                                                     | `8089`                         |
 | `STATS_PROMETHEUS_ENABLE_TLS`        |                                                                                     | `FALSE`                        |
@@ -137,15 +138,15 @@ Be sure to view the following repositories to understand all the customizable op
 | `STUN_IPV4_HOST`                     | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
 | `STUN_IPV6_HOST`                     | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
 | `STUN_LOG_LEVEL`                     | `critical` `debug` `error` `info` `notice` `warning`                                | `${LOG_LEVEL}`                 |
-| `TCP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               | |
+| `TCP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
 | `TCP_LISTEN_IP`                      |                                                                                     | `::`                           |
 | `TCP_LISTEN_PORT`                    |                                                                                     | `3478`                         |
 | `TLS_CERT_FILE`                      |                                                                                     | `cert.pem`                     |
 | `TLS_KEY_FILE`                       |                                                                                     | `key.pem`                      |
-| `TLS_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               | |
+| `TLS_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
 | `TLS_LISTEN_IP`                      |                                                                                     | `::`                           |
 | `TLS_LISTEN_PORT`                    |                                                                                     | `5349`                         |
-| `UDP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               | |
+| `UDP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
 | `UDP_LISTEN_IP`                      |                                                                                     | `::`                           |
 | `UDP_LISTEN_PORT`                    |                                                                                     | `3478`                         |
 | `WHITELIST_IP`                       |                                                                                     | ``                             |
