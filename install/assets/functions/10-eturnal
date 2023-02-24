@@ -155,6 +155,18 @@ configure_eturnal() {
                                             .eturnal.modules.mod_stats_prometheus.tls = env(STATS_PROMETHEUS_ENABLE_TLS) |
                                             .eturnal.modules.mod_stats_prometheus.vm_metrics = env(STATS_PROMETHEUS_ENABLE_VM_METRICS)
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+
+            if [ -n "${STATS_PROMETHEUS_TLS_CERT_FILE}" ] ; then
+                s6-setuidgid eturnal yq -i  '
+                                                .eturnal.modules.mod_stats_prometheus.tls_crt_file = env(STATS_PROMETHEUS_TLS_CERT_FILE)
+                                            ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            fi
+
+            if [ -n "${STATS_PROMETHEUS_TLS_KEY_FILE}" ] ; then
+                s6-setuidgid eturnal yq -i  '
+                                                .eturnal.modules.mod.stats.prometheus.tls_key_file = env(STATS_PROMETHEUS_TLS_KEY_FILE)
+                                            ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            fi
         fi
 
         if [ -n "${BLACKLIST_IP}" ] ; then

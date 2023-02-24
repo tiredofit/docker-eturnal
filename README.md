@@ -141,15 +141,15 @@ Be sure to view the following repositories to understand all the customizable op
 | `TCP_ENABLE_TURN`           | `true` `false` only offer STUN `true`                                                   |                                |
 | `TCP_LISTEN_IP`             |                                                                                         | `::`                           |
 | `TCP_LISTEN_PORT`           |                                                                                         | `3478`                         |
-| `TLS_CERT_FILE`             | Path and filename                                                                                        |                                |
+| `TLS_CERT_FILE`             | Path and filename                                                                       |                                |
 | `TLS_CIPHERS`               | TLS Cipher List                                                                         | `HIGH:!aNULL:@STRENGTH`        |
-| `TLS_DHPARAM_FILE`          | Path and filename
-| `TLS_KEY_FILE`              | Path and filename                                                                                        |                                |
+| `TLS_DHPARAM_FILE`          | Path and filename                                                                       |
+| `TLS_KEY_FILE`              | Path and filename                                                                       |                                |
 | `TLS_ENABLE_PROXY_PROTOCOL` | Grab client IP:port from Proxy Protocol header                                          | `false`                        |
 | `TLS_ENABLE_TURN`           | `true` `false` only offer STUN `true`                                                   |                                |
 | `TLS_LISTEN_IP`             |                                                                                         | `::`                           |
 | `TLS_LISTEN_PORT`           |                                                                                         | `5349`                         |
-| `TLS_OPTIONS` | Comma seperated eg  `no_tlsv1,no_tlsv1_1,cipherserver_prference` | |
+| `TLS_OPTIONS`               | Comma seperated eg  `no_tlsv1,no_tlsv1_1,cipherserver_prference`                        |                                |
 | `UDP_ENABLE_TURN`           | `true` `false` only offer STUN `true`                                                   |                                |
 | `UDP_LISTEN_IP`             |                                                                                         | `::`                           |
 | `UDP_LISTEN_PORT`           |                                                                                         | `3478`                         |
@@ -166,6 +166,8 @@ Be sure to view the following repositories to understand all the customizable op
 | `STATS_PROMETHEUS_ENABLE_VM_METRICS` |                                      | `false`     |
 | `STATS_PROMETHEUS_LISTEN_IP`         |                                      | `127.0.0.1` |
 | `STATS_PROMETHEUS_LISTEN_PORT`       |                                      | `8081`      |
+| `STATS_PROMETHEUS_TLS_CERT_FILE`       | Path and Filename                                     | ``      |
+| `STATS_PROMETHEUS_TLS_KEY_FILE`       | Path and Filename                                     | ``      |
 
 ### Networking
 
