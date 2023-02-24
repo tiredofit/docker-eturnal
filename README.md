@@ -30,6 +30,8 @@ This will build a Docker Image for [Eturnal](https://eturnal.net/), A STUN and T
   - [Environment Variables](#environment-variables)
     - [Base Images used](#base-images-used)
     - [Container Options](#container-options)
+    - [Eturnal Options](#eturnal-options)
+    - [Metrics Options](#metrics-options)
   - [Networking](#networking)
 - [Maintenance](#maintenance)
   - [Shell Access](#shell-access)
@@ -101,56 +103,62 @@ Be sure to view the following repositories to understand all the customizable op
 
 
 #### Container Options
+| Variable      | Value                                                | Default       |
+| ------------- | ---------------------------------------------------- | ------------- |
+| `CONFIG_FILE` |                                                      | `eturnal.yml` |
+| `CONFIG_PATH` |                                                      | `/config/`    |
+| `LOG_FILE`    |                                                      | `eturnal.log` |
+| `LOG_LEVEL`   | `critical` `debug` `error` `info` `notice` `warning` | `info`        |
+| `LOG_PATH`    |                                                      | `/logs/`      |
+| `LOG_TYPE`    | `FILE`                                               | `FILE`        |
+| `SETUP_MODE`  | `AUTO`                                               | `AUTO`        |
 
-| Variable                             | Value                                                                               | Default                        |
-| ------------------------------------ | ----------------------------------------------------------------------------------- | ------------------------------ |
-| `BLACKLIST_IP`                       | Comma seperated                                                                     | `127.0.0.0/8,::1`              |
-| `CONFIG_FILE`                        |                                                                                     | `eturnal.yml`                  |
-| `CONFIG_PATH`                        |                                                                                     | `/config/`                     |
-| `DATA_PATH`                          |                                                                                     | `/data/`                       |
-| `ENABLE_IPV4`                        | Enable IPV4 Support                                                                 | `TRUE`                         |
-| `ENABLE_IPV6`                        | Enable IPV6 Support                                                                 | `FALSE`                        |
-| `ENABLE_LOG_STUN`                    |                                                                                     | `FALSE`                        |
-| `ENABLE_STATS_INFLUX`                |                                                                                     | `FALSE`                        |
-| `ENABLE_STATS_PROMETHEUS`            |                                                                                     | `FALSE`                        |
-| `ENABLE_TCP`                         |                                                                                     | `TRUE`                         |
-| `ENABLE_TLS`                         |                                                                                     | `FALSE`                        |
-| `ENABLE_UDP`                         |                                                                                     | `TRUE`                         |
-| `ETURNALCTL_ARGS`                    |                                                                                     |                                |
-| `LOG_FILE`                           |                                                                                     | `eturnal.log`                  |
-| `LOG_LEVEL`                          | `critical` `debug` `error` `info` `notice` `warning`                                | `info`                         |
-| `LOG_PATH`                           |                                                                                     | `/logs/`                       |
-| `LOG_TYPE`                           |                                                                                     | `FILE`                         |
-| `PUBLIC_IPV4`                        | `auto` to use `STUN_IPV4_HOST` or IPV4 eg `123.123.123.123`                         |                                |
-| `PUBLIC_IPV6`                        | `auto` to use `STUN_IPV6_HOST` or IPV6 eg `FE80:0000:0000:0000:0202:B3FF:FE1E:8329` |                                |
-| `REALM` | Authentication Realm | `eturnal.net` |
-| `RELAY_MIN_PORT`                     |                                                                                     | `49152`                        |
-| `RELAY_MAX_PORT`                     |                                                                                     | `65535`                        |
-| `SECRET`                             |                                                                                     | `tiredofit`                    |
-| `SETUP_MODE`                         |                                                                                     | `AUTO`                         |
-| `SOFTWARE_NAME`                      | Software name to advertise during STUN/TURN                                         | `eturnal`                      |
-| `STATS_INFLUX_HOST`                  |                                                                                     | ``                             |
-| `STATS_INFLUX_PORT`                  |                                                                                     | `8089`                         |
-| `STATS_PROMETHEUS_ENABLE_TLS`        |                                                                                     | `FALSE`                        |
-| `STATS_PROMETHEUS_ENABLE_VM_METRICS` |                                                                                     | `false`                        |
-| `STATS_PROMETHEUS_LISTEN_IP`         |                                                                                     | `127.0.0.1`                    |
-| `STATS_PROMETHEUS_LISTEN_PORT`       |                                                                                     | `8081`                         |
-| `STRICT_EXPIRY`                      |                                                                                     | `false`                        |
-| `STUN_IPV4_SERVICE`                  | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
-| `STUN_IPV6_SERVICE`                  | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
-| `STUN_LOG_LEVEL`                     | `critical` `debug` `error` `info` `notice` `warning`                                | `${LOG_LEVEL}`                 |
-| `TCP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
-| `TCP_LISTEN_IP`                      |                                                                                     | `::`                           |
-| `TCP_LISTEN_PORT`                    |                                                                                     | `3478`                         |
-| `TLS_CERT_FILE`                      |                                                                                     | `cert.pem`                     |
-| `TLS_KEY_FILE`                       |                                                                                     | `key.pem`                      |
-| `TLS_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
-| `TLS_LISTEN_IP`                      |                                                                                     | `::`                           |
-| `TLS_LISTEN_PORT`                    |                                                                                     | `5349`                         |
-| `UDP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
-| `UDP_LISTEN_IP`                      |                                                                                     | `::`                           |
-| `UDP_LISTEN_PORT`                    |                                                                                     | `3478`                         |
-| `WHITELIST_IP`                       |                                                                                     | ``                             |
+#### Eturnal Options
+| Variable            | Value                                                                               | Default                        |
+| ------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
+| `BLACKLIST_IP`      | Comma seperated                                                                     | `127.0.0.0/8,::1`              |
+| `ENABLE_IPV4`       | Enable IPV4 Support                                                                 | `TRUE`                         |
+| `ENABLE_IPV6`       | Enable IPV6 Support                                                                 | `FALSE`                        |
+| `ENABLE_LOG_STUN`   | Enable logging STUN requests                                                        | `FALSE`                        |
+| `ENABLE_TCP`        |                                                                                     | `TRUE`                         |
+| `ENABLE_TLS`        |                                                                                     | `FALSE`                        |
+| `ENABLE_UDP`        |                                                                                     | `TRUE`                         |
+| `ETURNALCTL_ARGS`   | Extra arguments to pass to `eternalctl`                                             |                                |
+| `PUBLIC_IPV4`       | `auto` to use `STUN_IPV4_HOST` or IPV4 eg `123.123.123.123`                         |                                |
+| `PUBLIC_IPV6`       | `auto` to use `STUN_IPV6_HOST` or IPV6 eg `FE80:0000:0000:0000:0202:B3FF:FE1E:8329` |                                |
+| `REALM`             | Authentication Realm                                                                | `eturnal.net`                  |
+| `RELAY_MIN_PORT`    | Minimum Port Range                                                                  | `49152`                        |
+| `RELAY_MAX_PORT`    | Maximum Port Range                                                                  | `65535`                        |
+| `SECRET`            | Shared secret                                                                       | `tiredofit`                    |
+| `SOFTWARE_NAME`     | Software name to advertise during STUN/TURN                                         | `eturnal`                      |
+| `STRICT_EXPIRY`     | Disconnect clients as soon as credentials expire                                    | `false`                        |
+| `STUN_IPV4_SERVICE` | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
+| `STUN_IPV6_SERVICE` | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
+| `STUN_LOG_LEVEL`    | `critical` `debug` `error` `info` `notice` `warning`                                | `${LOG_LEVEL}`                 |
+| `TCP_ENABLE_TURN`   | `true` `false` only offer STUN `true`                                               |                                |
+| `TCP_LISTEN_IP`     |                                                                                     | `::`                           |
+| `TCP_LISTEN_PORT`   |                                                                                     | `3478`                         |
+| `TLS_CERT_FILE`     |                                                                                     |                                |
+| `TLS_KEY_FILE`      |                                                                                     |                                |
+| `TLS_ENABLE_TURN`   | `true` `false` only offer STUN `true`                                               |                                |
+| `TLS_LISTEN_IP`     |                                                                                     | `::`                           |
+| `TLS_LISTEN_PORT`   |                                                                                     | `5349`                         |
+| `UDP_ENABLE_TURN`   | `true` `false` only offer STUN `true`                                               |                                |
+| `UDP_LISTEN_IP`     |                                                                                     | `::`                           |
+| `UDP_LISTEN_PORT`   |                                                                                     | `3478`                         |
+| `WHITELIST_IP`      | Comma seperated                                                                     | ``                             |
+
+#### Metrics Options
+| Variable                             | Value                                | Default     |
+| ------------------------------------ | ------------------------------------ | ----------- |
+| `ENABLE_STATS_INFLUX`                |                                      | `FALSE`     |
+| `ENABLE_STATS_PROMETHEUS`            | Enable Prometheus Statistics Support | `FALSE`     |
+| `STATS_INFLUX_HOST`                  |                                      | ``          |
+| `STATS_INFLUX_PORT`                  |                                      | `8089`      |
+| `STATS_PROMETHEUS_ENABLE_TLS`        | `true` `false`                       | `false`     |
+| `STATS_PROMETHEUS_ENABLE_VM_METRICS` |                                      | `false`     |
+| `STATS_PROMETHEUS_LISTEN_IP`         |                                      | `127.0.0.1` |
+| `STATS_PROMETHEUS_LISTEN_PORT`       |                                      | `8081`      |
 
 ### Networking
 
@@ -173,6 +181,7 @@ docker exec -it (whatever your container name is) bash
 ## Support
 
 These images were built to serve a specific need in a production environment and gradually have had more functionality added based on requests from the community.
+
 ### Usage
 - The [Discussions board](../../discussions) is a great place for working with the community on tips and tricks of using this image.
 - Consider [sponsoring me](https://github.com/sponsors/tiredofit) for personalized support.

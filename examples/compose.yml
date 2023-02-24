@@ -19,6 +19,7 @@ services:
       - ENABLE_IPV4=TRUE
       - PUBLIC_IPV4=auto
 
+      - SECRET=tiredofit
       - RELAY_MIN_PORT=50000
       - RELAY_MAX_PORT=50500
 

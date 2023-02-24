@@ -29,7 +29,7 @@ configure_eturnal() {
                                         .eturnal.realm = env(REALM) |
                                         .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
                                         .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
-                                        .eturnal.strict_expiry = strenv(STRICT_EXPIRY) |
+                                        .eturnal.strict_expiry = env(STRICT_EXPIRY) |
                                         .eturnal.software_name = env(SOFTWARE_NAME)
                                     ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
 
@@ -81,7 +81,7 @@ configure_eturnal() {
             s6-setuidgid eturnal yq -i  '.eturnal.listen +=     [
                                                                     {
                                                                         "transport" : "tls",
-                                                                        "ip" : env(TLS_LISTEN_IP),
+                                                                        "ip" : strenv(TLS_LISTEN_IP),
                                                                         "port" : env(TLS_LISTEN_PORT),
                                                                         "enable_turn": env(TLS_ENABLE_TURN)
                                                                     }
