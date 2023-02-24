@@ -25,10 +25,12 @@ configure_eturnal() {
         sudo -u eturnal echo '' > "${CONFIG_PATH}"/"${CONFIG_FILE}"
 
         s6-setuidgid eturnal yq -i  '
-                                        .eturnal.secret = env(SECRET) |
+                                        .eturnal.max_bps = env(MAX_BPS) |
+                                        .eturnal.max_permissions = env(MAX_PERMISSIONS) |
                                         .eturnal.realm = env(REALM) |
                                         .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
                                         .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
+                                        .eturnal.secret = env(SECRET) |
                                         .eturnal.strict_expiry = env(STRICT_EXPIRY) |
                                         .eturnal.software_name = env(SOFTWARE_NAME)
                                     ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
@@ -90,17 +92,38 @@ configure_eturnal() {
                                                                 ]
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
 
-            if [ -n "${TLS_CERT_FILE}" ] ; then
-                s6-setuidgid eturnal yq -i  '
-                                                .eturnal.tls_crt_file = env(TLS_CERT_FILE)
-                                            ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
-            fi
+        fi
 
-            if [ -n "${TLS_KEY_FILE}" ] ; then
-                s6-setuidgid eturnal yq -i  '
-                                                .eturnal.tls_key_file = env(TLS_KEY_FILE)
-                                            ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
-            fi
+        if [ -n "${TLS_CIPHERS}" ] ; then
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.tls_ciphers = env(TLS_CIPHERS)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if [ -n "${TLS_OPTIONS}" ] ; then
+            tls_options="$(echo "${TLS_OPTIONS}" | tr "," "\n")"
+            for tls_option in $tls_options ; do
+                export tlsopt=${tls_option}
+                s6-setuidgid eturnal yq -i  '.eturnal.tls_optionswhitelist += [ env(tlsopt) ]' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+            done
+        fi
+
+        if [ -n "${TLS_DHPARAM_FILE}" ] ; then
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.tls_dh_file = env(TLS_DHPARAM_FILE)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if [ -n "${TLS_CERT_FILE}" ] ; then
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.tls_crt_file = env(TLS_CERT_FILE)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
+        fi
+
+        if [ -n "${TLS_KEY_FILE}" ] ; then
+            s6-setuidgid eturnal yq -i  '
+                                            .eturnal.tls_key_file = env(TLS_KEY_FILE)
+                                        ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
         fi
 
         if [ "${LOG_TYPE,,}" = "console" ] ; then

@@ -114,39 +114,46 @@ Be sure to view the following repositories to understand all the customizable op
 | `SETUP_MODE`  | `AUTO`                                               | `AUTO`        |
 
 #### Eturnal Options
-| Variable            | Value                                                                               | Default                        |
-| ------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
-| `BLACKLIST_IP`      | Comma seperated                                                                     | `127.0.0.0/8,::1`              |
-| `ENABLE_IPV4`       | Enable IPV4 Support                                                                 | `TRUE`                         |
-| `ENABLE_IPV6`       | Enable IPV6 Support                                                                 | `FALSE`                        |
-| `ENABLE_LOG_STUN`   | Enable logging STUN requests                                                        | `FALSE`                        |
-| `ENABLE_TCP`        |                                                                                     | `TRUE`                         |
-| `ENABLE_TLS`        |                                                                                     | `FALSE`                        |
-| `ENABLE_UDP`        |                                                                                     | `TRUE`                         |
-| `ETURNALCTL_ARGS`   | Extra arguments to pass to `eternalctl`                                             |                                |
-| `PUBLIC_IPV4`       | `auto` to use `STUN_IPV4_HOST` or IPV4 eg `123.123.123.123`                         |                                |
-| `PUBLIC_IPV6`       | `auto` to use `STUN_IPV6_HOST` or IPV6 eg `FE80:0000:0000:0000:0202:B3FF:FE1E:8329` |                                |
-| `REALM`             | Authentication Realm                                                                | `eturnal.net`                  |
-| `RELAY_MIN_PORT`    | Minimum Port Range                                                                  | `49152`                        |
-| `RELAY_MAX_PORT`    | Maximum Port Range                                                                  | `65535`                        |
-| `SECRET`            | Shared secret                                                                       | `tiredofit`                    |
-| `SOFTWARE_NAME`     | Software name to advertise during STUN/TURN                                         | `eturnal`                      |
-| `STRICT_EXPIRY`     | Disconnect clients as soon as credentials expire                                    | `false`                        |
-| `STUN_IPV4_SERVICE` | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
-| `STUN_IPV6_SERVICE` | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
-| `STUN_LOG_LEVEL`    | `critical` `debug` `error` `info` `notice` `warning`                                | `${LOG_LEVEL}`                 |
-| `TCP_ENABLE_TURN`   | `true` `false` only offer STUN `true`                                               |                                |
-| `TCP_LISTEN_IP`     |                                                                                     | `::`                           |
-| `TCP_LISTEN_PORT`   |                                                                                     | `3478`                         |
-| `TLS_CERT_FILE`     |                                                                                     |                                |
-| `TLS_KEY_FILE`      |                                                                                     |                                |
-| `TLS_ENABLE_TURN`   | `true` `false` only offer STUN `true`                                               |                                |
-| `TLS_LISTEN_IP`     |                                                                                     | `::`                           |
-| `TLS_LISTEN_PORT`   |                                                                                     | `5349`                         |
-| `UDP_ENABLE_TURN`   | `true` `false` only offer STUN `true`                                               |                                |
-| `UDP_LISTEN_IP`     |                                                                                     | `::`                           |
-| `UDP_LISTEN_PORT`   |                                                                                     | `3478`                         |
-| `WHITELIST_IP`      | Comma seperated                                                                     | ``                             |
+| Variable                    | Value                                                                                   | Default                        |
+| --------------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
+| `BLACKLIST_IP`              | Comma seperated                                                                         | `127.0.0.0/8,::1`              |
+| `ENABLE_IPV4`               | Enable IPV4 Support                                                                     | `TRUE`                         |
+| `ENABLE_IPV6`               | Enable IPV6 Support                                                                     | `FALSE`                        |
+| `ENABLE_LOG_STUN`           | Enable logging STUN requests                                                            | `FALSE`                        |
+| `ENABLE_TCP`                |                                                                                         | `TRUE`                         |
+| `ENABLE_TLS`                |                                                                                         | `FALSE`                        |
+| `ENABLE_UDP`                |                                                                                         | `TRUE`                         |
+| `ETURNALCTL_ARGS`           | Extra arguments to pass to `eternalctl`                                                 |                                |
+| `MAX_BPS`                   | Limit bandwidth via a `number eg `10000` or `unlimited`                                 | `unlimited`                    |
+| `MAX_PERMISSIONS`           | Limit maxmimum number of TURN permissions per allocation. Number eg `10` or `unlimited` | `10`                           |
+| `PUBLIC_IPV4`               | `auto` to use `STUN_IPV4_HOST` or IPV4 eg `123.123.123.123`                             |                                |
+| `PUBLIC_IPV6`               | `auto` to use `STUN_IPV6_HOST` or IPV6 eg `FE80:0000:0000:0000:0202:B3FF:FE1E:8329`     |                                |
+| `REALM`                     | Authentication Realm                                                                    | `eturnal.net`                  |
+| `RELAY_MIN_PORT`            | Minimum Port Range                                                                      | `49152`                        |
+| `RELAY_MAX_PORT`            | Maximum Port Range                                                                      | `65535`                        |
+| `SECRET`                    | Shared secret                                                                           | `tiredofit`                    |
+| `SOFTWARE_NAME`             | Software name to advertise during STUN/TURN                                             | `eturnal`                      |
+| `STRICT_EXPIRY`             | Disconnect clients as soon as credentials expire                                        | `false`                        |
+| `STUN_IPV4_SERVICE`         | Use this host to lookup your IPV4 Address                                               | `stun.google.com:19302`        |
+| `STUN_IPV6_SERVICE`         | Use this host to lookup your IPV6 Address                                               | `[2a01:4f8:1c0c:6374::1]:3478` |
+| `STUN_LOG_LEVEL`            | `critical` `debug` `error` `info` `notice` `warning`                                    | `${LOG_LEVEL}`                 |
+| `TCP_ENABLE_PROXY_PROTOCOL` | Grab client IP:port from Proxy Protocol header                                          | `false`                        |
+| `TCP_ENABLE_TURN`           | `true` `false` only offer STUN `true`                                                   |                                |
+| `TCP_LISTEN_IP`             |                                                                                         | `::`                           |
+| `TCP_LISTEN_PORT`           |                                                                                         | `3478`                         |
+| `TLS_CERT_FILE`             | Path and filename                                                                                        |                                |
+| `TLS_CIPHERS`               | TLS Cipher List                                                                         | `HIGH:!aNULL:@STRENGTH`        |
+| `TLS_DHPARAM_FILE`          | Path and filename
+| `TLS_KEY_FILE`              | Path and filename                                                                                        |                                |
+| `TLS_ENABLE_PROXY_PROTOCOL` | Grab client IP:port from Proxy Protocol header                                          | `false`                        |
+| `TLS_ENABLE_TURN`           | `true` `false` only offer STUN `true`                                                   |                                |
+| `TLS_LISTEN_IP`             |                                                                                         | `::`                           |
+| `TLS_LISTEN_PORT`           |                                                                                         | `5349`                         |
+| `TLS_OPTIONS` | Comma seperated eg  `no_tlsv1,no_tlsv1_1,cipherserver_prference` | |
+| `UDP_ENABLE_TURN`           | `true` `false` only offer STUN `true`                                                   |                                |
+| `UDP_LISTEN_IP`             |                                                                                         | `::`                           |
+| `UDP_LISTEN_PORT`           |                                                                                         | `3478`                         |
+| `WHITELIST_IP`              | Comma seperated                                                                         | ``                             |
 
 #### Metrics Options
 | Variable                             | Value                                | Default     |
