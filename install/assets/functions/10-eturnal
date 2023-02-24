@@ -71,7 +71,8 @@ configure_eturnal() {
                                                                         "transport" : "tcp",
                                                                         "ip" : strenv(TCP_LISTEN_IP),
                                                                         "port" : env(TCP_LISTEN_PORT),
-                                                                        "enable_turn": env(TCP_ENABLE_TURN)
+                                                                        "enable_turn": env(TCP_ENABLE_TURN),
+                                                                        "proxy_protocol": env(TCP_ENABLE_PROXY_PROTOCOL)
                                                                     }
                                                                 ]
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
@@ -83,7 +84,8 @@ configure_eturnal() {
                                                                         "transport" : "tls",
                                                                         "ip" : strenv(TLS_LISTEN_IP),
                                                                         "port" : env(TLS_LISTEN_PORT),
-                                                                        "enable_turn": env(TLS_ENABLE_TURN)
+                                                                        "enable_turn": env(TLS_ENABLE_TURN),
+                                                                        "proxy_protocol": env(TCP_ENABLE_PROXY_PROTOCOL)
                                                                     }
                                                                 ]
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
