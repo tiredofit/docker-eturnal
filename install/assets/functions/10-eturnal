@@ -61,7 +61,8 @@ configure_eturnal() {
                                                                     {
                                                                         "transport" : "udp",
                                                                         "ip" : strenv(UDP_LISTEN_IP),
-                                                                        "port" : env(UDP_LISTEN_PORT)
+                                                                        "port" : env(UDP_LISTEN_PORT),
+                                                                        "enable_turn": env(UDP_ENABLE_TURN)
                                                                     }
                                                                 ]
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
@@ -72,7 +73,8 @@ configure_eturnal() {
                                                                     {
                                                                         "transport" : "tcp",
                                                                         "ip" : strenv(TCP_LISTEN_IP),
-                                                                        "port" : env(TCP_LISTEN_PORT)
+                                                                        "port" : env(TCP_LISTEN_PORT),
+                                                                        "enable_turn": env(TCP_ENABLE_TURN)
                                                                     }
                                                                 ]
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
@@ -83,7 +85,8 @@ configure_eturnal() {
                                                                     {
                                                                         "transport" : "tls",
                                                                         "ip" : env(TLS_LISTEN_IP),
-                                                                        "port" : env(TLS_LISTEN_PORT)
+                                                                        "port" : env(TLS_LISTEN_PORT),
+                                                                        "enable_turn": env(TLS_ENABLE_TURN)
                                                                     }
                                                                 ]
                                         ' "${CONFIG_PATH}"/"${CONFIG_FILE}"

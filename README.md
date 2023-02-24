@@ -109,7 +109,7 @@ Be sure to view the following repositories to understand all the customizable op
 | `CONFIG_PATH`                        |                                                                                     | `/config/`                     |
 | `DATA_PATH`                          |                                                                                     | `/data/`                       |
 | `ENABLE_IPV4`                        | Enable IPV4 Support                                                                 | `TRUE`                         |
-| `ENABLE_IPV6`                        | Enable IPV6 Support                                                                  | `FALSE`                        |
+| `ENABLE_IPV6`                        | Enable IPV6 Support                                                                 | `FALSE`                        |
 | `ENABLE_LOG_STUN`                    |                                                                                     | `FALSE`                        |
 | `ENABLE_STATS_INFLUX`                |                                                                                     | `FALSE`                        |
 | `ENABLE_STATS_PROMETHEUS`            |                                                                                     | `FALSE`                        |
@@ -137,12 +137,15 @@ Be sure to view the following repositories to understand all the customizable op
 | `STUN_IPV4_HOST`                     | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
 | `STUN_IPV6_HOST`                     | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
 | `STUN_LOG_LEVEL`                     | `critical` `debug` `error` `info` `notice` `warning`                                | `${LOG_LEVEL}`                 |
+| `TCP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               | |
 | `TCP_LISTEN_IP`                      |                                                                                     | `::`                           |
 | `TCP_LISTEN_PORT`                    |                                                                                     | `3478`                         |
 | `TLS_CERT_FILE`                      |                                                                                     | `cert.pem`                     |
 | `TLS_KEY_FILE`                       |                                                                                     | `key.pem`                      |
+| `TLS_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               | |
 | `TLS_LISTEN_IP`                      |                                                                                     | `::`                           |
 | `TLS_LISTEN_PORT`                    |                                                                                     | `5349`                         |
+| `UDP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               | |
 | `UDP_LISTEN_IP`                      |                                                                                     | `::`                           |
 | `UDP_LISTEN_PORT`                    |                                                                                     | `3478`                         |
 | `WHITELIST_IP`                       |                                                                                     | ``                             |

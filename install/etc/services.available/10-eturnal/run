@@ -10,7 +10,7 @@ check_service_initialized init
 liftoff
 
 print_start "Starting Eturnal ${ETURNAL_VERSION}"
-exec sudo -u eturnal \
+silent exec sudo -u eturnal \
                                 eturnalctl foreground \
                                         ${ETURNAL_ARGS}
 
