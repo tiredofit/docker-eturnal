@@ -109,7 +109,7 @@ Be sure to view the following repositories to understand all the customizable op
 | `CONFIG_PATH`                        |                                                                                     | `/config/`                     |
 | `DATA_PATH`                          |                                                                                     | `/data/`                       |
 | `ENABLE_IPV4`                        | Enable IPV4 Support                                                                 | `TRUE`                         |
-| `ENABLE_IPV6`                        | Enable IPV Support                                                                  | `FALSE`                        |
+| `ENABLE_IPV6`                        | Enable IPV6 Support                                                                  | `FALSE`                        |
 | `ENABLE_LOG_STUN`                    |                                                                                     | `FALSE`                        |
 | `ENABLE_STATS_INFLUX`                |                                                                                     | `FALSE`                        |
 | `ENABLE_STATS_PROMETHEUS`            |                                                                                     | `FALSE`                        |
