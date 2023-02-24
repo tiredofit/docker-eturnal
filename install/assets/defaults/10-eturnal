@@ -15,6 +15,7 @@ LOG_FILE=${LOG_FILE:-"eturnal.log"}
 LOG_LEVEL=${LOG_LEVEL:-"info"}
 LOG_PATH=${LOG_PATH:-"/logs/"}
 LOG_TYPE=${LOG_TYPE:-"FILE"}
+REALM=${REALM:-"eturnal.net"}
 RELAY_MAX_PORT=${RELAY_MAX_PORT:-"65535"}
 RELAY_MIN_PORT=${RELAY_MIN_PORT:-"49152"}
 SECRET=${SECRET:-"tiredofit"}

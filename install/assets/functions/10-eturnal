@@ -26,6 +26,7 @@ configure_eturnal() {
 
         s6-setuidgid eturnal yq -i  '
                                         .eturnal.secret = env(SECRET) |
+                                        .eturnal.realm = env(REALM) |
                                         .eturnal.relay_min_port = env(RELAY_MIN_PORT) |
                                         .eturnal.relay_max_port = env(RELAY_MAX_PORT) |
                                         .eturnal.strict_expiry = strenv(STRICT_EXPIRY) |

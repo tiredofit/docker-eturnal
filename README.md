@@ -123,8 +123,9 @@ Be sure to view the following repositories to understand all the customizable op
 | `LOG_TYPE`                           |                                                                                     | `FILE`                         |
 | `PUBLIC_IPV4`                        | `auto` to use `STUN_IPV4_HOST` or IPV4 eg `123.123.123.123`                         |                                |
 | `PUBLIC_IPV6`                        | `auto` to use `STUN_IPV6_HOST` or IPV6 eg `FE80:0000:0000:0000:0202:B3FF:FE1E:8329` |                                |
-| `RELAY_MAX_PORT`                     |                                                                                     | `65535`                        |
+| `REALM` | Authentication Realm | `eturnal.net` |
 | `RELAY_MIN_PORT`                     |                                                                                     | `49152`                        |
+| `RELAY_MAX_PORT`                     |                                                                                     | `65535`                        |
 | `SECRET`                             |                                                                                     | `tiredofit`                    |
 | `SETUP_MODE`                         |                                                                                     | `AUTO`                         |
 | `SOFTWARE_NAME`                      | Software name to advertise during STUN/TURN                                         | `eturnal`                      |
@@ -135,8 +136,8 @@ Be sure to view the following repositories to understand all the customizable op
 | `STATS_PROMETHEUS_LISTEN_IP`         |                                                                                     | `127.0.0.1`                    |
 | `STATS_PROMETHEUS_LISTEN_PORT`       |                                                                                     | `8081`                         |
 | `STRICT_EXPIRY`                      |                                                                                     | `false`                        |
-| `STUN_IPV4_SERVICE`                     | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
-| `STUN_IPV6_SERVICE`                     | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
+| `STUN_IPV4_SERVICE`                  | Use this host to lookup your IPV4 Address                                           | `stun.google.com:19302`        |
+| `STUN_IPV6_SERVICE`                  | Use this host to lookup your IPV6 Address                                           | `[2a01:4f8:1c0c:6374::1]:3478` |
 | `STUN_LOG_LEVEL`                     | `critical` `debug` `error` `info` `notice` `warning`                                | `${LOG_LEVEL}`                 |
 | `TCP_ENABLE_TURN`                    | `true` `false` only offer STUN `true`                                               |                                |
 | `TCP_LISTEN_IP`                      |                                                                                     | `::`                           |
