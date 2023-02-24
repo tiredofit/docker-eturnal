@@ -96,7 +96,7 @@ configure_eturnal() {
 
             if [ -n "${TLS_KEY_FILE}" ] ; then
                 s6-setuidgid eturnal yq -i  '
-                                                .eturnal.tls_crt_file = env(TLS_KEY_FILE)
+                                                .eturnal.tls_key_file = env(TLS_KEY_FILE)
                                             ' "${CONFIG_PATH}"/"${CONFIG_FILE}"
             fi
         fi
