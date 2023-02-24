@@ -166,8 +166,8 @@ Be sure to view the following repositories to understand all the customizable op
 | `STATS_PROMETHEUS_ENABLE_VM_METRICS` |                                      | `false`     |
 | `STATS_PROMETHEUS_LISTEN_IP`         |                                      | `127.0.0.1` |
 | `STATS_PROMETHEUS_LISTEN_PORT`       |                                      | `8081`      |
-| `STATS_PROMETHEUS_TLS_CERT_FILE`       | Path and Filename                                     | ``      |
-| `STATS_PROMETHEUS_TLS_KEY_FILE`       | Path and Filename                                     | ``      |
+| `STATS_PROMETHEUS_TLS_CERT_FILE`     | Path and Filename                    | ``          |
+| `STATS_PROMETHEUS_TLS_KEY_FILE`      | Path and Filename                    | ``          |
 
 ### Networking
 

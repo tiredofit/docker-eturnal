@@ -1,3 +1,13 @@
+## 1.0.0 2023-02-24 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add Zabbix exporting of metrics and include template
+      - Add TLS Support for prometheus metrics
+      - Add TLS_CIPHER,TLS_OPTIONS,TLS_DHPARAM_FILE support
+      - Add PROXY protocol support for TLS and TCP
+      - Add MAX_BPS and MAX_PERMISSIONS settings
+
+
 ## 0.8.1 2023-02-24 <dave at tiredofit dot ca>
 
    ### Changed
