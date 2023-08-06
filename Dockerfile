@@ -6,7 +6,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG ETURNAL_VERSION
 
-ENV ETURNAL_VERSION=1.11.0 \
+ENV ETURNAL_VERSION=1.11.1 \
     ETURNAL_REPO_URL=https://github.com/processone/eturnal \
     IMAGE_NAME="tiredofit/eturnal" \
     IMAGE_REPO_URL="https://github.com/tiredofit/eturnal/"
