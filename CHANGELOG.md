@@ -1,3 +1,9 @@
+## 1.0.2 2023-08-06 <dave at tiredofit dot ca>
+
+   ### Added
+      - Eturnal 1.11.0
+
+
 ## 1.0.1 2023-05-10 <dave at tiredofit dot ca>
 
    ### Added
