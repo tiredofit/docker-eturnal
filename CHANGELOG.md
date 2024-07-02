@@ -1,3 +1,11 @@
+## 1.1.0 2024-07-02 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add ETURNAL_USER and ETURNAL_GROUP environment variables
+      - Set permissions on /usr/lib/eturnal/run on startup to accomodate for changed uid/gid
+      - Alpine 3.20 base
+
+
 ## 1.0.5 2023-12-08 <dave at tiredofit dot ca>
 
    ### Added

@@ -16,6 +16,8 @@ bootstrap_filesystem() {
             create_logrotate eturnal "${LOG_PATH}"/"${LOG_FILE}" eturnal eturnal
         ;;
     esac
+
+    chown -R "${ETURNAL_USER}":"${ETURNAL_GROUP}" /usr/lib/eturnal/run
 }
 
 configure_eturnal() {

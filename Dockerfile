@@ -1,5 +1,5 @@
 ARG DISTRO=alpine
-ARG DISTRO_VARIANT=3.19
+ARG DISTRO_VARIANT=3.20
 
 FROM docker.io/tiredofit/${DISTRO}:${DISTRO_VARIANT}
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
@@ -8,17 +8,19 @@ ARG ETURNAL_VERSION
 
 ENV ETURNAL_VERSION=1.12.0 \
     ETURNAL_REPO_URL=https://github.com/processone/eturnal \
+    ETURNAL_USER=${ETURNAL_USER:-"eturnal"} \
+    ETURNAL_GROUP=${ETURNAL_GROUP:-"eturnal"} \
     IMAGE_NAME="tiredofit/eturnal" \
     IMAGE_REPO_URL="https://github.com/tiredofit/eturnal/"
 
 RUN source assets/functions/00-container && \
     set -x && \
-    addgroup -S -g 3478 eturnal && \
+    addgroup -S -g 3478 ${ETURNAL_GROUP} && \
     adduser -D -S -s /sbin/nologin \
             -h /usr/lib/eturnal/run \
-            -G eturnal \
+            -G ${ETURNAL_GROUP} \
             -g "eturnal" \
-            -u 3478 eturnal \
+            -u 3478 ${ETURNAL_USER} \
             && \
     \
     package update && \
@@ -57,7 +59,7 @@ RUN source assets/functions/00-container && \
     ln -sf /usr/lib/eturnal/bin/stun /usr/sbin/stun && \
     rm -rf /usr/lib/eturnal/etc/* && \
     mkdir -p /usr/lib/eturnal/run && \
-    chown -R eturnal:eturnal /usr/lib/eturnal/run && \
+    chown -R "${ETURNAL_USER}":"${ETURNAL_GROUP}" /usr/lib/eturnal/run && \
     package remove .eturnal-build-deps && \
     package cleanup && \
     \
